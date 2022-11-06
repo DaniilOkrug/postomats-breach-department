@@ -1,0 +1,45 @@
+syntax = "proto3";
+import "rpc/common.proto";
+
+message BBox {
+  XY upper_left = 1;
+  XY bottom_right = 2;
+}
+
+message Assessment {
+  repeated float score = 1;
+}
+
+message InBounds {
+  BBox bounds = 1;
+  repeated XY points = 2;
+}
+
+message AssessRequest {
+    repeated XY points = 1;
+}
+
+enum Models {
+    ONLY_DISTANCES_MODEL = 0;
+    POSTOFFICES_AS_COEFFS = 1;
+    DENY_IF_POSTOFFICE_NEARBY = 2;
+}
+
+message ModelInitialization {
+    Models model = 1;
+    int32 R = 2;
+    int32 B = 3;
+    repeated XY already_deployed = 4;
+    int32 C = 5;
+    int32 R2 = 6;
+}
+
+message NewModelResponse {
+    bool status = 1;
+}
+
+service Model {
+    rpc NewModel(ModelInitialization) returns (NewModelResponse);
+    rpc Assess(AssessRequest) returns (Assessment);
+    rpc AssessInBounds(InBounds) returns (Assessment);
+}

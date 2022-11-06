@@ -1,0 +1,13 @@
+services:
+  rpc-server:
+    build: 
+      context: .
+      dockerfile: rpc_server.Dockerfile
+    ports: 
+      - 3110:3110
+    restart: always
+    environment:
+      - LDT_DATASETS_FOLDER=/etc/ldt/data
+    volumes:
+      - ./data/final/:/etc/ldt/data:ro
+    
